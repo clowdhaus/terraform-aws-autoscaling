@@ -278,6 +278,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_autoscaling_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
+| [aws_autoscaling_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_policy) | resource |
 | [aws_launch_configuration.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_configuration) | resource |
 | [aws_launch_template.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [null_resource.tags_as_list_of_maps](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
@@ -286,6 +287,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_asg_policy_adjustment_type"></a> [asg\_policy\_adjustment\_type](#input\_asg\_policy\_adjustment\_type) | Specifies whether the adjustment is an absolute number or a percentage of the current capacity. Valid values are `ChangeInCapacity`, `ExactCapacity`, and `PercentChangeInCapacity` | `string` | `null` | no |
+| <a name="input_asg_policy_cooldown"></a> [asg\_policy\_cooldown](#input\_asg\_policy\_cooldown) | The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start | `number` | `null` | no |
+| <a name="input_asg_policy_estimated_instance_warmup"></a> [asg\_policy\_estimated\_instance\_warmup](#input\_asg\_policy\_estimated\_instance\_warmup) | The estimated time, in seconds, until a newly launched instance will contribute CloudWatch metrics. Without a value, AWS will default to the group's specified cooldown period | `number` | `null` | no |
+| <a name="input_asg_policy_metric_aggregation_type"></a> [asg\_policy\_metric\_aggregation\_type](#input\_asg\_policy\_metric\_aggregation\_type) | The aggregation type for the policy's metrics. Valid values are `Minimum`, `Maximum`, and `Average`. Without a value, AWS will treat the aggregation type as `Average` | `string` | `null` | no |
+| <a name="input_asg_policy_min_adjustment_magnitude"></a> [asg\_policy\_min\_adjustment\_magnitude](#input\_asg\_policy\_min\_adjustment\_magnitude) | Minimum value to scale by when adjustment\_type is set to `PercentChangeInCapacity` | `number` | `null` | no |
+| <a name="input_asg_policy_name"></a> [asg\_policy\_name](#input\_asg\_policy\_name) | Name of autoscaling policy to be created | `string` | `""` | no |
+| <a name="input_asg_policy_scaling_adjustment"></a> [asg\_policy\_scaling\_adjustment](#input\_asg\_policy\_scaling\_adjustment) | The number of instances by which to scale. `asg_policy_adjustment_type` determines the interpretation of this number (e.g., as an absolute number or as a percentage of the existing Auto Scaling group size). A positive increment adds to the current capacity and a negative value removes from the current capacity | `number` | `null` | no |
+| <a name="input_asg_policy_step_adjustment"></a> [asg\_policy\_step\_adjustment](#input\_asg\_policy\_step\_adjustment) | A set of adjustments that manage group scaling | `list(any)` | `[]` | no |
+| <a name="input_asg_policy_target_tracking_configuration"></a> [asg\_policy\_target\_tracking\_configuration](#input\_asg\_policy\_target\_tracking\_configuration) | A target tracking policy | `list(any)` | `[]` | no |
+| <a name="input_asg_policy_type"></a> [asg\_policy\_type](#input\_asg\_policy\_type) | The policy type, either `SimpleScaling`, `StepScaling` or `TargetTrackingScaling`. If this value isn't provided, AWS will default to `SimpleScaling` | `string` | `null` | no |
 | <a name="input_associate_public_ip_address"></a> [associate\_public\_ip\_address](#input\_associate\_public\_ip\_address) | (LC) Associate a public ip address with an instance in a VPC | `bool` | `null` | no |
 | <a name="input_availability_zone"></a> [availability\_zone](#input\_availability\_zone) | A list of one or more availability zones for the group. Used for EC2-Classic and default subnets when not specified with `vpc_zone_identifier` argument. Conflicts with `vpc_zone_identifier` | `list(string)` | `null` | no |
 | <a name="input_block_device_mappings"></a> [block\_device\_mappings](#input\_block\_device\_mappings) | (LT) Specify volumes to attach to the instance besides the volumes specified by the AMI | `list(any)` | `[]` | no |
@@ -293,6 +304,7 @@ No modules.
 | <a name="input_capacity_reservation_specification"></a> [capacity\_reservation\_specification](#input\_capacity\_reservation\_specification) | (LT) Targeting for EC2 capacity reservations | `any` | `null` | no |
 | <a name="input_cpu_options"></a> [cpu\_options](#input\_cpu\_options) | (LT) The CPU options for the instance | `map(string)` | `null` | no |
 | <a name="input_create_asg"></a> [create\_asg](#input\_create\_asg) | Determines whether to create autoscaling group or not | `bool` | `true` | no |
+| <a name="input_create_asg_policy"></a> [create\_asg\_policy](#input\_create\_asg\_policy) | Determines whether to create autoscaling policy or not | `bool` | `false` | no |
 | <a name="input_create_lc"></a> [create\_lc](#input\_create\_lc) | Determines whether to create launch configuration or not | `bool` | `false` | no |
 | <a name="input_create_lt"></a> [create\_lt](#input\_create\_lt) | Determines whether to create launch template or not | `bool` | `false` | no |
 | <a name="input_credit_specification"></a> [credit\_specification](#input\_credit\_specification) | (LT) Customize the credit specification of the instance | `map(string)` | `null` | no |
@@ -385,6 +397,10 @@ No modules.
 | <a name="output_autoscaling_group_name"></a> [autoscaling\_group\_name](#output\_autoscaling\_group\_name) | The autoscaling group name |
 | <a name="output_autoscaling_group_target_group_arns"></a> [autoscaling\_group\_target\_group\_arns](#output\_autoscaling\_group\_target\_group\_arns) | List of Target Group ARNs that apply to this AutoScaling Group |
 | <a name="output_autoscaling_group_vpc_zone_identifier"></a> [autoscaling\_group\_vpc\_zone\_identifier](#output\_autoscaling\_group\_vpc\_zone\_identifier) | The VPC zone identifier |
+| <a name="output_autoscaling_policy_adjustment_type"></a> [autoscaling\_policy\_adjustment\_type](#output\_autoscaling\_policy\_adjustment\_type) | The scaling policy's adjustment type |
+| <a name="output_autoscaling_policy_arn"></a> [autoscaling\_policy\_arn](#output\_autoscaling\_policy\_arn) | The ARN assigned by AWS to the scaling policy |
+| <a name="output_autoscaling_policy_name"></a> [autoscaling\_policy\_name](#output\_autoscaling\_policy\_name) | The scaling policy's name |
+| <a name="output_autoscaling_policy_policy_type"></a> [autoscaling\_policy\_policy\_type](#output\_autoscaling\_policy\_policy\_type) | The scaling policy's type |
 | <a name="output_launch_configuration_arn"></a> [launch\_configuration\_arn](#output\_launch\_configuration\_arn) | The ARN of the launch configuration |
 | <a name="output_launch_configuration_id"></a> [launch\_configuration\_id](#output\_launch\_configuration\_id) | The ID of the launch configuration |
 | <a name="output_launch_configuration_name"></a> [launch\_configuration\_name](#output\_launch\_configuration\_name) | The name of the launch configuration |

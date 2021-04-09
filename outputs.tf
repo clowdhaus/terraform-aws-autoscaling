@@ -104,3 +104,27 @@ output "autoscaling_group_target_group_arns" {
   description = "List of Target Group ARNs that apply to this AutoScaling Group"
   value       = element(concat(aws_autoscaling_group.this.*.target_group_arns, [""]), 0)
 }
+
+################################################################################
+# Autoscaling policy
+################################################################################
+
+output "autoscaling_policy_arn" {
+  description = "The ARN assigned by AWS to the scaling policy"
+  value       = element(concat(aws_autoscaling_policy.this.*.arn, [""]), 0)
+}
+
+output "autoscaling_policy_name" {
+  description = "The scaling policy's name"
+  value       = element(concat(aws_autoscaling_policy.this.*.name, [""]), 0)
+}
+
+output "autoscaling_policy_adjustment_type" {
+  description = "The scaling policy's adjustment type"
+  value       = element(concat(aws_autoscaling_policy.this.*.adjustment_type, [""]), 0)
+}
+
+output "autoscaling_policy_policy_type" {
+  description = "The scaling policy's type"
+  value       = element(concat(aws_autoscaling_policy.this.*.policy_type, [""]), 0)
+}
