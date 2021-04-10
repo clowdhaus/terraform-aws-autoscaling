@@ -393,6 +393,28 @@ module "complete_lt" {
     triggers = ["tag"]
   }
 
+  # Autoscaling policy - Step Scaling
+  asg_policies = [
+    {
+      name                     = "complete-lt-stepscaling-${local.name}"
+      adjustment_type          = "PercentChangeInCapacity"
+      policy_type              = "StepScaling"
+      min_adjustment_magnitude = 2
+      metric_aggregation_type  = "Minimum"
+      step_adjustments = [
+        {
+          scaling_adjustment          = -1
+          metric_interval_lower_bound = 1.0
+          metric_interval_upper_bound = 2.0
+        },
+        {
+          scaling_adjustment          = 1
+          metric_interval_lower_bound = 2.0
+        }
+      ]
+    }
+  ]
+
   # Launch template
   lt_name                = "complete-lt-${local.name}"
   description            = "Complete launch template example"

@@ -5,8 +5,6 @@ locals {
   lt_name         = coalesce(var.lt_name, var.name)
   launch_template = var.create_lt ? aws_launch_template.this[0].name : var.launch_template
 
-  asg_policy_name = coalesce(var.asg_policy_name, var.name)
-
   tags = concat(
     [
       {
@@ -437,26 +435,26 @@ resource "aws_autoscaling_group" "this" {
 ################################################################################
 
 resource "aws_autoscaling_policy" "this" {
-  count = var.create_asg && var.create_asg_policy ? 1 : 0
+  for_each = var.create_asg ? var.asg_policies : []
 
-  name                      = local.asg_policy_name
+  name                      = lookup(each.value, "name", var.name)
   autoscaling_group_name    = aws_autoscaling_group.this[0].name
-  adjustment_type           = var.asg_policy_adjustment_type
-  policy_type               = var.asg_policy_type
-  estimated_instance_warmup = var.asg_policy_estimated_instance_warmup
+  adjustment_type           = lookup(each.value, "adjustment_type", null)
+  policy_type               = lookup(each.value, "policy_type", null)
+  estimated_instance_warmup = lookup(each.value, "estimated_instance_warmup", null)
 
   # SimpleScaling or StepScaling
-  min_adjustment_magnitude = contains(["SimpleScaling", "StepScaling"], var.asg_policy_type) ? var.asg_policy_min_adjustment_magnitude : null
+  min_adjustment_magnitude = contains(["SimpleScaling", "StepScaling", null], lookup(each.value, "policy_type", null)) ? lookup(each.value, "min_adjustment_magnitude", null) : null
 
   # SimpleScaling only
-  cooldown           = var.asg_policy_type == "SimpleScaling" ? var.asg_policy_cooldown : null
-  scaling_adjustment = var.asg_policy_type == "SimpleScaling" ? var.asg_policy_scaling_adjustment : null
+  cooldown           = contains(["SimpleScaling", null], lookup(each.value, "policy_type", null)) ? lookup(each.value, "cooldown", null) : null
+  scaling_adjustment = contains(["SimpleScaling", null], lookup(each.value, "policy_type", null)) ? lookup(each.value, "scaling_adjustment", null) : null
 
   # StepScaling only
-  metric_aggregation_type = var.asg_policy_type == "StepScaling" ? var.asg_policy_metric_aggregation_type : null
+  metric_aggregation_type = contains(["StepScaling", null], lookup(each.value, "policy_type", null)) ? lookup(each.value, "metric_aggregation_type", null) : null
 
   dynamic "step_adjustment" {
-    for_each = var.asg_policy_type == "StepScaling" ? var.asg_policy_step_adjustment : []
+    for_each = var.asg_policy_type == "StepScaling" ? var.asg_policy_step_adjustments : []
     content {
       scaling_adjustment          = step_adjustment.value.scaling_adjustment
       metric_interval_lower_bound = lookup(step_adjustment.value, "metric_interval_lower_bound", null)

@@ -221,71 +221,71 @@ variable "tags_as_map" {
 # Autoscaling policy
 ################################################################################
 
-variable "create_asg_policy" {
-  description = "Determines whether to create autoscaling policy or not"
-  type        = bool
-  default     = false
-}
-
-variable "asg_policy_name" {
-  description = "Name of autoscaling policy to be created"
-  type        = string
-  default     = ""
-}
-
-variable "asg_policy_adjustment_type" {
-  description = "Specifies whether the adjustment is an absolute number or a percentage of the current capacity. Valid values are `ChangeInCapacity`, `ExactCapacity`, and `PercentChangeInCapacity`"
-  type        = string
-  default     = null
-}
-
-variable "asg_policy_type" {
-  description = "The policy type, either `SimpleScaling`, `StepScaling` or `TargetTrackingScaling`. If this value isn't provided, AWS will default to `SimpleScaling`"
-  type        = string
-  default     = null
-}
-
-variable "asg_policy_estimated_instance_warmup" {
-  description = "The estimated time, in seconds, until a newly launched instance will contribute CloudWatch metrics. Without a value, AWS will default to the group's specified cooldown period"
-  type        = number
-  default     = null
-}
-
-variable "asg_policy_min_adjustment_magnitude" {
-  description = "Minimum value to scale by when adjustment_type is set to `PercentChangeInCapacity`"
-  type        = number
-  default     = null
-}
-
-variable "asg_policy_cooldown" {
-  description = "The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start"
-  type        = number
-  default     = null
-}
-
-variable "asg_policy_scaling_adjustment" {
-  description = "The number of instances by which to scale. `asg_policy_adjustment_type` determines the interpretation of this number (e.g., as an absolute number or as a percentage of the existing Auto Scaling group size). A positive increment adds to the current capacity and a negative value removes from the current capacity"
-  type        = number
-  default     = null
-}
-
-variable "asg_policy_metric_aggregation_type" {
-  description = "The aggregation type for the policy's metrics. Valid values are `Minimum`, `Maximum`, and `Average`. Without a value, AWS will treat the aggregation type as `Average`"
-  type        = string
-  default     = null
-}
-
-variable "asg_policy_step_adjustment" {
-  description = "A set of adjustments that manage group scaling"
+variable "asg_policies" {
+  description = "A list of autoscaling policies to be applied to the autoscaling group"
   type        = list(any)
   default     = []
 }
 
-variable "asg_policy_target_tracking_configuration" {
-  description = "A target tracking policy"
-  type        = list(any)
-  default     = []
-}
+# variable "asg_policy_name" {
+#   description = "Name of autoscaling policy to be created"
+#   type        = string
+#   default     = ""
+# }
+
+# variable "asg_policy_adjustment_type" {
+#   description = "Specifies whether the adjustment is an absolute number or a percentage of the current capacity. Valid values are `ChangeInCapacity`, `ExactCapacity`, and `PercentChangeInCapacity`"
+#   type        = string
+#   default     = null
+# }
+
+# variable "asg_policy_type" {
+#   description = "The policy type, either `SimpleScaling`, `StepScaling` or `TargetTrackingScaling`. If this value isn't provided, AWS will default to `SimpleScaling`"
+#   type        = string
+#   default     = null
+# }
+
+# variable "asg_policy_estimated_instance_warmup" {
+#   description = "The estimated time, in seconds, until a newly launched instance will contribute CloudWatch metrics. Without a value, AWS will default to the group's specified cooldown period"
+#   type        = number
+#   default     = null
+# }
+
+# variable "asg_policy_min_adjustment_magnitude" {
+#   description = "Minimum value to scale by when adjustment_type is set to `PercentChangeInCapacity`"
+#   type        = number
+#   default     = null
+# }
+
+# variable "asg_policy_cooldown" {
+#   description = "The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start"
+#   type        = number
+#   default     = null
+# }
+
+# variable "asg_policy_scaling_adjustment" {
+#   description = "The number of instances by which to scale. `asg_policy_adjustment_type` determines the interpretation of this number (e.g., as an absolute number or as a percentage of the existing Auto Scaling group size). A positive increment adds to the current capacity and a negative value removes from the current capacity"
+#   type        = number
+#   default     = null
+# }
+
+# variable "asg_policy_metric_aggregation_type" {
+#   description = "The aggregation type for the policy's metrics. Valid values are `Minimum`, `Maximum`, and `Average`. Without a value, AWS will treat the aggregation type as `Average`"
+#   type        = string
+#   default     = null
+# }
+
+# variable "asg_policy_step_adjustments" {
+#   description = "A set of adjustments that manage group scaling"
+#   type        = list(any)
+#   default     = []
+# }
+
+# variable "asg_policy_target_tracking_configuration" {
+#   description = "A target tracking policy"
+#   type        = list(any)
+#   default     = []
+# }
 ################################################################################
 # Common - launch configuration or launch template
 ################################################################################
